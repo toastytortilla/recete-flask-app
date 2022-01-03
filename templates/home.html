@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <div class="container-large p-2">
+        <div class="row mt-5">
+            <div class="col justify-content-start align-self-start">
+                <h1 class="align-items-left justify-content-start title_text black"><strong>My Dashboard</strong></h1>
+            </div>
+            <div class="col justify-content-end align-self-start align-items-bottom my-auto py-auto">
+                <form action="/manager" method="GET" name="add_receipt" target="_self">
+                    <input class="btn brand-button flavor_text_sm" autocomplete="off" type="submit" value="Add a receipt">
+                </form>
+            </div>
+        </div>
+        <div class="row mt-1 mb-2">
+            <div class="col justify-content-start align-self-start">
+                <h3 class="align-items-left justify-content-start flavor_text black">Receipts Uploaded: <span class="dark_green"><strong>{{ total_receipts }}</strong></span></h3>
+            </div>
+            <div class="col justify-content-end align-self-start">
+                <h3 class="align-items-right justify-content-end flavor_text black">Total Spent: <span class="dark_green"><strong>{{ usd(total_spent) }}</strong></span></h3>
+            </div>
+        </div>
+        <div class="row mb-3 mx-4 px-4">
+            <div class="col"></div>
+            <div class="col-12 container-fluid justify-content-center aligh-items-center align-self-center w-100">
+                {% if total_receipts > 0 %}
+                    {% include graph %}
+                {% else %}
+                    <img src="{{ url_for('static', filename='/graphics/blank_graph.gif') }}" alt="black graph when user has no receipts" width="750">
+                {% endif %}
+            </div>
+            <div class="col"></div> 
+        </div>
+        <div class="container-fluid my-2">
+            <div class="row justify-content-center align-items-center">
+                <h3 class="flavor_text black"><strong>Recent Transactions</strong></h3>
+                {% if total_receipts > 1 %}
+                    <table class="table table-hover align-self-center black">
+                        <thead>
+                            <tr>
+                                <th class="text-start col-sm-2 black">Date</th>
+                                <th class="text-start col black">Company</th>
+                                <th class="text-start col black">Category</th>
+                                <th class="text-start col-sm-2 black">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in receipts %}
+                            <tr>
+                                <td class="text-start col-sm-2 black">{{ item['date'] }}</td>
+                                <td class="text-start col black">{{ item['company'] }}</td>
+                                <td class="text-start col black">{{ item['trans_type'] }}</td>
+                                <td class="text-start col-sm-2 black">{{ usd(item['total']) }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="flavor_text_sm black">Add a receipt to get started</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

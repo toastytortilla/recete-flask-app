@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Receipt Manager
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <h1 class="mt-5 mb-2 title_text black"><strong>My Receipts</strong></h1>
+    <div class="mx-5 px-5">
+        {% if len_receipts < 1 %}
+            <p class="flavor_text_sm black">Add a receipt to get started</p>
+        {% endif %}
+        <table class="table table-hover black">
+            <thead>
+                <tr>
+                    <th class="text-start col-sm-2">Date</th>
+                    <th class="text-start col">Company</th>
+                    <th class="text-start col">Category</th>
+                    <th class="text-start col-sm-2">Split</th>
+                    <th class="text-start col-sm-2">Total</th>
+                    <th class="text-center col-sm-1">Receipt</th>
+                    <th class="text-center col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <form action="/manager" method="post" enctype="multipart/form-data">
+                        <td class="text-start col-sm-2"><input class="col-sm-12" autocomplete="off" autofocus id="receipt_add" name="date" placeholder="Date" type="date" required></td>
+                        <td class="text-start col"><input autocomplete="off" id="receipt_add" name="company" placeholder="Company" type="text" required></td>
+                        <td class="text-start col">
+                            <select autocomplete="off" id="receipt_add" name="type" type="text" size="1" required> 
+                                <option value="" disabled selected>Select a type</option>
+                                {% for type in types %}
+                                    <option value="{{ type }}">{{ type }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td class="text-start col-sm-2"><input class="col-sm-12" autocomplete="off" id="receipt_add" name="split" placeholder="Split by" type="number"></td>
+                        <td class="text-start col-sm-2"><input class="col-sm-12" autocomplete="off" id="receipt_add" name="total" placeholder="Total" type="number" step="0.01" min="0"></td>
+                        <td class="text-center col">
+                            <label for="image" class="btn brand-button custom-file-upload">Select</label>
+                            <input class="col-sm-12" autocomplete="off" id="image" name="image" type="file" value=""/>
+                        </td>
+                        <td class="text-center col"><input class="btn brand-button" autocomplete="off" type="submit" value="  Add  "></td>
+                    </form>
+                </tr>
+                {% for item in receipts %}
+                <tr>
+                    <td class="text-start">{{ item['date'] }}</td>
+                    <td class="text-start">{{ item['company'] }}</td>
+                    <td class="text-start">{{ item['trans_type'] }}</td>
+                    <td class="text-start">{{ item['split'] }}</td>
+                    <td class="text-start">{{ usd(item['total']) }}</td>
+                    <td class="text-center">
+                        <form action="/open_img" method="post" name="og_img" target="_blank">
+                            <button name="og_img" type="submit" value="{{ item['og_img'] }}" class="img-btn">
+                                <img src="{{ item['thumbnail_img'] }}" width="42" style="border-radius: 6px;">
+                            </button>
+                        </form>
+                    </td>
+                    <td class="text-center">
+                        <form action="/delete" method="post">
+                            <input name="id" type="hidden" value="{{ item['id'] }}">
+                            <input type="submit" value="Delete" class="btn brand-button">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% endblock %}

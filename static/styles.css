@@ -1,0 +1,212 @@
+/* 
+General formatting
+ */
+html body {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+nav {
+    background-color: #DBFFEE;
+    box-shadow: 0px -2px 10px rbg(0, 0, 0);
+    border: none;
+}
+
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: xx-large;
+}
+
+main .form-control
+{
+    /* Center form controls */
+    display: inline-block;
+
+    /* Override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main
+{
+    /* Scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* Center contents */
+    text-align: center;
+}
+
+main img
+{
+    /* Constrain images on small screens */
+    max-width: 100%;
+}
+
+.neg-margin-1 {
+    margin-top: -1rem;
+}
+
+.neg-margin-3 {
+    margin-top: -3rem;
+}
+
+
+/* 
+Text colors / Brand colors
+*/
+.dark_green {
+    color: #32AF73;
+}
+
+.green {
+    color: #4ED695;
+}
+
+.light_green {
+    color: #DBFFEE;
+}
+
+.light_green_bg {
+    background-color: #DBFFEE;
+}
+
+.black {
+    color: #444444;
+} 
+
+.white {
+    color: white;    
+}
+
+/* 
+Text styling 
+*/
+.flavor_text {
+    font-size: 2rem;
+    font-weight: 1.5rem;
+}
+
+.flavor_text_sm {
+    font-size: 1.5rem;
+    font-weight: 1rem;
+}
+
+.title_text {
+    font-size: 3rem;
+    font-weight: 1.5rem;
+}
+
+.title_text_xl {
+    font-size: 5rem;
+    font-weight: 3rem;
+    line-height: 95%;
+}
+
+nav .navbar-brand h1 {
+    font-weight: bolder;
+}
+
+
+/* 
+Button design 
+*/
+.brand-button {
+    background-color: #32AF73;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0px 2px 4px rgba(52, 52, 52, 0.309);
+}
+
+.brand-button:hover, .brand-button:focus {
+    background-color: #4ed695;
+    color: white;
+}
+
+.brand-button:active {
+    background-color: #32AF73;
+    box-shadow: 0px 3px 10px rgba(52, 52, 52, 0.638);
+    transform: translateY(2px);
+}
+
+.index-button {
+    background-color: #32AF73;
+    color: white;
+    font-weight:bolder;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 4px 6px 0px rgb(246, 104, 197);
+}
+
+.index-button:hover, .index-button:focus {
+    color: white;
+    box-shadow: 0px 4px 10px rgb(246, 104, 197);
+}
+
+.index-button:active {
+    background-color: #32AF73;
+    box-shadow: 0px 4px 10px rgb(194, 0, 126);
+    transform: translateY(2px);
+}
+
+.img-btn {
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+
+/* 
+Link decorations 
+*/
+
+a {
+    color:rgb(28, 28, 28);
+}
+
+a:hover {
+    color: #4ed695;
+}
+
+a:visited {
+    color: #32AF73;
+}
+
+/* 
+Table formatting 
+*/
+input[type="file"] {
+    display: none;
+}
+
+select {
+    /* font-size: 20px; */
+    padding-top: 4.2px;
+    padding-bottom: 4.2px;
+    padding-left: 2px;
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: #444444;
+    color: #444444;
+}
+
+select option {
+    color: #444444
+}
+
+input {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    border-radius: 6px;
+    border-color: #444444;
+}
+
+/* 
+Splash image formatting 
+*/
+.splash-image-main {
+    min-width: 256px;
+    max-width: 95%;
+    width: 100%;
+}
