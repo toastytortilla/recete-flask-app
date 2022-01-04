@@ -14,12 +14,15 @@
                 <div class="col-6">
                     <form action="/login" method="POST">
                         <div class="form-group mb-3">
-                            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+                            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text"/>
                         </div>
-                        <div class="form-group mb-3">
-                            <input class="form-control" name="password" placeholder="Password" type="password">
+                        <div class="form-group mb-1">
+                            <input class="form-control" name="password" placeholder="Password" type="password"/>
                         </div>
-                        <div class="form-group">
+                        <div>
+                            <a href="/templates/pw_reset.html">Forgot password?</a>
+                        </div>
+                        <div class="form-group mt-3">
                             <button class="btn brand-button form-control" type="submit" value="Log In">Log In</button>
                         </div>
                     </form>

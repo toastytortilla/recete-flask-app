@@ -434,10 +434,21 @@ def register():
         return render_template("register.html")
 
 
-@app.route("/pw_change", methods=["POST"])
-def pw_change():
+@app.route("/pw_reset", methods=["GET", "POST"])
+@login_required
+def pw_reset():
     """ Allows a user to change their password """
-    return apology("This page is under construction!", 400)
+    if request.method == "POST":
+        return apology("This function is still under construction!", 400)
+    # If POST
+    # Get input from user
+    # Check if pw's match each other
+    # Update the db with the new pw
+    
+    else:
+    # If GET
+    # Just render the page as-is
+        return render_template("pw_reset.html")
 
 # Add usd helper function to jinja
 app.jinja_env.globals.update(usd=usd)

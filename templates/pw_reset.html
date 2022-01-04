@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Password Reset
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row my-5">
+            <h1 class="title_text black"><strong>Reset your password</strong></h1>
+        </div>
+        <div class="row mt-5 mb-0">
+            <div class="col"></div>
+                <div class="col-6">
+                    <form action="/pw_reset" method="POST">
+                        <div class="form-group mb-3">
+                            <input class="form-control" id="password" name="password" placeholder="New password" type="password" required/>
+                        </div>
+                        <div class="form-group row mb-1 small text-muted">
+                            <p class="text-start mb-0">Your password must be at least 8 characters long and include at least one of each:</p>
+                            <ul>
+                                <li class="text-start mb-0">Uppercase letter</li>
+                                <li class="text-start mb-0">Lowercase letter</li>
+                                <li class="text-start mb-0">Number</li>
+                                <li class="text-start mb-0">Symbol, punctuation, or special character</li>
+                            </ul>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input class="form-control" id="confirmation" name="confirmation" placehodler="Confirm password" type="password" required/>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn brand-button form-control" type="submit" value="Change Password">Change Password</button>
+                        </div>
+                    </form>
+                    <form action="/pw_reset_email" method="POST">
+                        <div class="form-group">
+                            <button class="btn brand-button form-control" type="submit" value="Change Password">No, I <em>really</em> forgot my password. Send me an email please.</button>
+                        </div>
+                    </form>
+                </div>
+            <!-- <div class="col"></div> -->
+        </div>
+    </div>
+    
+{% endblock %}
