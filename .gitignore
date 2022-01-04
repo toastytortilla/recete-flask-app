@@ -65,11 +65,13 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
-# Ignore database and prototype files
+# Ignore database, user files, and prototype files
 recete.db
 manager.py
 pics.py
 config.py
+static/receipts/*.*
+templates/graphs/*.html
 
 # Scrapy stuff:
 .scrapy

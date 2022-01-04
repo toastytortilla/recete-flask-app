@@ -90,6 +90,11 @@ Text styling
     font-weight: 1rem;
 }
 
+.flavor_text_xs {
+    font-size: 1rem;
+    font-weight: 1rem;
+}
+
 .title_text {
     font-size: 3rem;
     font-weight: 1.5rem;
@@ -169,6 +174,20 @@ a:hover {
 }
 
 a:visited {
+    color: #32AF73;
+}
+
+.link {
+    text-decoration: underline;
+    border: none;
+    background-color: transparent;
+}
+
+.link:hover {
+    color: #4ed695;
+}
+
+.link:active {
     color: #32AF73;
 }
 

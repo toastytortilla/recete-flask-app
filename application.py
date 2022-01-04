@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 
 from flask import Flask, flash, redirect, render_template, url_for, request, session
 from flask_session import Session
+from flask_mail import Mail, Message
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -15,7 +16,7 @@ from werkzeug.utils import secure_filename
 
 from helpers import apology, connect_db, login_required, url_path, usd, allowed_image, convert_img, byte_wrapper
 
-# Configure application
+"""Configure application"""
 app = Flask(__name__)
 
 # Ensure templates are auto-reloaded
@@ -39,6 +40,15 @@ app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+# Configure flask_mail
+app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+mail = Mail(app)
 
 
 TRANS_TYPES = [
@@ -192,7 +202,7 @@ def manager():
                 # return render_template("manager.html", show_img=url_for('static', filename="receipts/" + thmb_img.filename))
             
             else:
-                flash("Please upload a .jpg/.jpeg or .heic")
+                flash("Please upload a .jpg/.jpeg or .heic", "message")
                 return redirect(request.url)
 
         # Add receipt to receipts table in recete.db
@@ -435,20 +445,66 @@ def register():
 
 
 @app.route("/pw_reset", methods=["GET", "POST"])
-@login_required
 def pw_reset():
     """ Allows a user to change their password """
     if request.method == "POST":
-        return apology("This function is still under construction!", 400)
-    # If POST
-    # Get input from user
-    # Check if pw's match each other
-    # Update the db with the new pw
-    
+        # Get input from user
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        # Check for valid username
+        if not username:
+            return apology("must provide username", 400)
+
+        for char in username:
+            if char == " ":
+                return apology("Provide a valid email address", 400)
+
+        # Ensure password was submitted
+        if not password:
+            return apology("must provide password", 403)
+
+        # Connect db, create cursor
+        rec = connect_db()
+        cur = rec.cursor()
+
+        # Query database for username
+        rows = cur.execute("SELECT * FROM users WHERE username = ?", [username]).fetchall()
+
+        # Create list to store user acct info
+        acct = []
+
+        # Iterate over data from db and format into a list of dicts
+        for item in rows:
+            acct.append({k: item[k] for k in item.keys()})
+
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(acct[0]["hash"], password):
+            return apology("invalid username and/or password", 403)
+
+        else:
+            # Route user to pw_update.html
+            return redirect("/pw_update")
+
     else:
-    # If GET
-    # Just render the page as-is
         return render_template("pw_reset.html")
+
+
+@app.route("/pw_update", methods=["GET", "POST"])
+def pw_update():
+    """ Allows a user to change their password """
+    if request.method == "POST":
+        # Get input from user
+        username = request.form.get("username")
+        print(username)
+
+        # Check credentials against db
+        # Update the db with the new pw
+        return render_template("pw_update.html")
+
+    else:
+        return render_template("pw_update.html")
+
 
 # Add usd helper function to jinja
 app.jinja_env.globals.update(usd=usd)
