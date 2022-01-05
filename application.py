@@ -14,7 +14,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import apology, connect_db, login_required, url_path, usd, allowed_image, convert_img, byte_wrapper
+from helpers import apology, connect_db, login_required, url_path, usd, allowed_image, convert_img, byte_wrapper, validate_pw
 
 """Configure application"""
 app = Flask(__name__)
@@ -42,12 +42,13 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure flask_mail
-app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
-app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
-app.config["MAIL_PORT"] = 587
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+app.config['MAIL_SERVER']='smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = '979d2bf9103414'
+app.config['MAIL_PASSWORD'] = '45f3b34792e5b8'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_DEFAULT_SENDER'] = ('recete-bot')
 mail = Mail(app)
 
 
@@ -391,39 +392,16 @@ def register():
 
 
         # Check for valid password
-        flag_upper = False
-        flag_lower = False
-        flag_digit = False
-        flag_char = False
+        hashed_pw = validate_pw(password, confirmation)
 
-        if len(password) < 8:
-            return apology("Password must be at least 8 characters long.", 400)
+        if hashed_pw == 0:
+            return apology("Password must be at least 8 characters", 400)
 
-        for char in password:
-            if char.isupper():
-                flag_upper = True
+        if hashed_pw == 1:
+            return apology("Password does not meet complexity requirements", 400)
 
-            if char.islower():
-                flag_lower = True
-
-            if char.isdigit():
-                flag_digit = True
-
-            if not char.isalpha() and not char.isdigit():
-                flag_char = True
-
-        if flag_upper and flag_lower and flag_digit and flag_char == True:
-            pass
-
-        else:
-            return apology("Password does not meet the requirements.", 400)
-
-        # Check passwords for match, hash if they do
-        if password == confirmation:
-            hashed_pw = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
-
-        else:
-            return apology("Passwords must match.", 400)
+        if hashed_pw ==2:
+            return apology("Passwords do not match", 400)
 
         print(f"username: {username}")
         print(f"pw: {hashed_pw}")
@@ -446,7 +424,7 @@ def register():
 
 @app.route("/pw_reset", methods=["GET", "POST"])
 def pw_reset():
-    """ Allows a user to change their password """
+    """ Landing route for password reset process """
     if request.method == "POST":
         # Get input from user
         username = request.form.get("username")
@@ -480,9 +458,12 @@ def pw_reset():
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(acct[0]["hash"], password):
-            return apology("invalid username and/or password", 403)
+            return apology("Invalid username and/or password", 403)
 
         else:
+            # Log user in to save the username/email
+            session["user_id"] = acct[0]["id"]
+
             # Route user to pw_update.html
             return redirect("/pw_update")
 
@@ -492,17 +473,177 @@ def pw_reset():
 
 @app.route("/pw_update", methods=["GET", "POST"])
 def pw_update():
-    """ Allows a user to change their password """
+    """ Form/logic for updating a password """
     if request.method == "POST":
         # Get input from user
-        username = request.form.get("username")
-        print(username)
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
 
-        # Check credentials against db
-        # Update the db with the new pw
-        return render_template("pw_update.html")
+        # Check for both password fields to be filled
+        if not request.form.get("password"):
+            return apology("must provide username", 400)
+
+        if not request.form.get("confirmation"):
+            return apology("must provide username", 400)
+
+        # Check for valid password
+        hashed_pw = validate_pw(password, confirmation)
+
+        if hashed_pw == 0:
+            return apology("Password must be at least 8 characters", 400)
+
+        if hashed_pw == 1:
+            return apology("Password does not meet complexity requirements", 400)
+
+        if hashed_pw ==2:
+            return apology("Passwords do not match", 400)
+
+        else:
+            print("Success!") # Make this an alert eventually
+
+        # Connect to db
+        rec = connect_db()
+        cur = rec.cursor()
+
+        # Submit new user to db
+        cur.execute("UPDATE users SET hash = (?) WHERE id == (?)", (hashed_pw, session["user_id"]))
+
+        # Save (commit the changes)
+        rec.commit()
+
+        # Close the db
+        cur.close()
+
+        # Sign user out so that they can log in again with their new pw
+        session.clear()
+
+        # Redirect user to login page
+        return redirect("/login")
 
     else:
+        return render_template("pw_update.html")
+
+
+@app.route("/pw_reset_email", methods=["POST"])
+def pw_reset_email():
+    """Sends email to user containing a password reset link"""
+    
+    # Get input from user
+    email = request.form.get("email")
+    print(f"email provided by user: {email}, and its type: {type(email)}")
+
+    # Connect db, create cursor
+    rec = connect_db()
+    cur = rec.cursor()
+
+    # Query database for username
+    rows = cur.execute("SELECT * FROM users WHERE username = ?", [email]).fetchall()
+
+    # Create list to store user acct info
+    acct = []
+
+    # Iterate over data from db and format into a list of dicts
+    for item in rows:
+        acct.append({k: item[k] for k in item.keys()})
+
+    # Ensure username exists
+    if len(rows) != 1:
+        return apology("Invalid email.", 403)
+
+    else:
+        # Send email
+        title = "Password reset link."
+        body = '<p>Hello, {{ email }}! <br> Click this link to reset your password. If you did not initiate this email, you can ignore this message.</p><form action="/pw_update" method="POST"><div class="mb-3 form-group"><input type="hidden" value="{{ email }}"/><button class="btn brand-button form-control" type="submit" value="Reset Password">Reset Password</button></div></form><p>Sincerely,</p><p>recete-bot <br>"Beep beep, I am a bot. Please do not reply to this email, as I cannot understand English"</p>'
+
+        msg = Message("Password reset link", recipients=[email])
+        msg.html = render_template('email_template.html', title=title, body=body, email=email)
+        mail.send(msg)
+
+        # Flash alert that tells user to check their email for the password reset link
+        return redirect("/login")
+
+
+
+@app.route("/pw_recover", methods=["POST"])
+def pw_recover():
+    """ Allows a user who has completely lost their password to recover it from the reset email """
+
+    if request.method == "POST":
+        # Get input from user
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        # Check for both password fields to be filled
+        if not request.form.get("password"):
+            return apology("must provide username", 400)
+
+        if not request.form.get("confirmation"):
+            return apology("must provide username", 400)
+
+        # Check for valid password
+        hashed_pw = validate_pw(password, confirmation)
+
+        if hashed_pw == 0:
+            return apology("Password must be at least 8 characters", 400)
+
+        if hashed_pw == 1:
+            return apology("Password does not meet complexity requirements", 400)
+
+        if hashed_pw ==2:
+            return apology("Passwords do not match", 400)
+
+        else:
+            print("Success!") # Make this an alert eventually
+
+        # Connect to db
+        rec = connect_db()
+        cur = rec.cursor()
+
+        # Submit new user to db
+        cur.execute("UPDATE users SET hash = (?) WHERE id == (?)", (hashed_pw, session["user_id"]))
+
+        # Save (commit the changes)
+        rec.commit()
+
+        # Close the db
+        cur.close()
+
+        # Sign user out so that they can log in again with their new pw
+        session.clear()
+
+        # Redirect user to login page
+        return redirect("/login")
+
+    else:
+        # Get input from user
+        email = request.form.get("email")
+
+        # Connect to db
+        rec = connect_db()
+        cur = rec.cursor()
+
+        # Query database for username
+        rows = cur.execute("SELECT * FROM users WHERE username = ?", [email]).fetchall()
+
+        # Create list to store user acct info
+        acct = []
+
+        # Iterate over data from db and format into a list of dicts
+        for item in rows:
+            acct.append({k: item[k] for k in item.keys()})
+
+        # Ensure username exists and password is correct
+        if len(rows) != 1:
+            return apology("Invalid username and/or password", 403)
+
+        # Get 
+
+        # Save (commit the changes)
+        rec.commit()
+
+        # Close the db
+        cur.close()
+
         return render_template("pw_update.html")
 
 

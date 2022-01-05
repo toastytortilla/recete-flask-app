@@ -95,6 +95,11 @@ Text styling
     font-weight: 1rem;
 }
 
+.title_text_sm {
+    font-size: 1.5rem;
+    font-weight: 1.5rem;
+}
+
 .title_text {
     font-size: 3rem;
     font-weight: 1.5rem;
