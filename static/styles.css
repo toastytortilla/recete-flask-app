@@ -71,7 +71,11 @@ Text colors / Brand colors
 
 .black {
     color: #444444;
-} 
+}
+
+.grey {
+    color: #888888;
+}
 
 .white {
     color: white;    
@@ -80,9 +84,14 @@ Text colors / Brand colors
 /* 
 Text styling 
 */
-.flavor_text {
-    font-size: 2rem;
-    font-weight: 1.5rem;
+.flavor_text_xxs {
+    font-size: 0.75rem;
+    font-weight: 1rem;
+}
+
+.flavor_text_xs {
+    font-size: 1rem;
+    font-weight: 1rem;
 }
 
 .flavor_text_sm {
@@ -90,9 +99,9 @@ Text styling
     font-weight: 1rem;
 }
 
-.flavor_text_xs {
-    font-size: 1rem;
-    font-weight: 1rem;
+.flavor_text {
+    font-size: 2rem;
+    font-weight: 1.5rem;
 }
 
 .title_text_sm {

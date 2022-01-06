@@ -8,33 +8,142 @@
         <!-- http://getbootstrap.com/docs/5.1/ -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-        <!-- https://favicon.io/emoji-favicons/money-mouth-face/ -->
-        <link href="/static/graphics/recete_favicon.ico" rel="icon">
+        <style>
+            /* 
+            General formatting
+            */
+            html body {
+                font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
 
-        <link href="/static/styles.css" rel="stylesheet">
+            main
+            {
+                /* Scroll horizontally as needed */
+                overflow-x: auto;
+
+                /* Center contents */
+                text-align: center;
+            }
+
+            main img
+            {
+                /* Constrain images on small screens */
+                max-width: 100%;
+            }
+
+            
+            /* 
+            Text colors / Brand colors
+            */
+            .dark_green {
+                color: #32AF73;
+            }
+
+            .green {
+                color: #4ED695;
+            }
+
+            .light_green {
+                color: #DBFFEE;
+            }
+
+            .light_green_bg {
+                background-color: #DBFFEE;
+            }
+
+            .black {
+                color: #444444;
+            }
+            
+            .grey {
+                color: #888888;
+            }
+
+            .white {
+                color: white;    
+            }
+
+            /* 
+            Text styling 
+            */
+            .flavor_text_xxs {
+                font-size: 0.75rem;
+                font-weight: 1rem;
+            }
+
+            .flavor_text_xs {
+                font-size: 1rem;
+                font-weight: 1rem;
+            }
+
+            .flavor_text_sm {
+                font-size: 1.5rem;
+                font-weight: 1rem;
+            }
+
+            .flavor_text {
+                font-size: 2rem;
+                font-weight: 1.5rem;
+            }
+
+            .title_text_sm {
+                font-size: 1.5rem;
+                font-weight: 1.5rem;
+            }
+
+            .title_text {
+                font-size: 3rem;
+                font-weight: 1.5rem;
+            }
+
+            .title_text_xl {
+                font-size: 5rem;
+                font-weight: 3rem;
+                line-height: 95%;
+            }
+
+            /* 
+            Shaping
+            */
+            .border {
+                border-color: #32AF73;
+                border-width: 3px;
+                border-radius: 10px;
+            }
+        </style>
 
         <!-- http://getbootstrap.com/docs/4.5/ -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     </head>
     <body>
-        <div class="container-lg my-1">
-            <header>
-                <div>
+        <div class="container-lg border my-1">
+            <main class="container p-2 my-auto">
+            <div class="col"></div>
+            <div class="col">
+                <div class="justify-content-center">
                     <h1 class="title_text_sm black">{{ title }}</h1>    
                 </div>
-            </header>
-        </div>
-        <div class="container-lg my-1">
-            <main class="container p-2 my-auto">
-                {{ body }}
+                <div>
+                    <p>Hello, {{ email }}!</p>
+                    <p>It looks like you forgot your password. We made a new one for you:</p>
+                        <h3><br/><span class="title_text_sm black">{{ password }}</span><br/><br/></h3>
+                    <p>Go ahead and log into Recete with your new password. <br/>Feel free to change it to something 
+                        you like better by <br/>using the Password Reset link found on the log in page.</p>
+                    <p>Sincerely,<br/>recete-bot</p>
+                    <p class="flavor_text_xxs grey text-center">"P.S. Beep beep, I am a bot. Please do not reply to this email, as I cannot understand English"</p>
+                </div>
+                <div>
+                    <a href="https://imgur.com/5GAoY72"><img src="https://i.imgur.com/5GAoY72.png" title="source: imgur.com - Recete brand logo" /></a>
+                </div>
+                <div>
+                    <footer class="flavor_text_xxs grey text-center text-muted mb-0 mt-auto pt-3 center">
+                        <p>Template provided by the helpful folks at <a href="https://online-learning.harvard.edu/course/cs50-introduction-computer-science?delta=0">CS50</a> and <a href="https://getbootstrap.com/">Bootstrap</a>. Thank you to the entire CS50 team for their incredible work!</a></p>
+                    </footer>
+                </div>
+            </div>
+            <div class="col"></div>
             </main>
-        </div>
-
-        <div class="container-lg neg-margin-1">
-            <footer class="small text-center text-muted mb-0 mt-auto pt-3" >
-                <p>Template provided by the helpful folks at <a href="https://online-learning.harvard.edu/course/cs50-introduction-computer-science?delta=0">CS50</a> and <a href="https://getbootstrap.com/">Bootstrap</a>. Thank you to the entire CS50 team for their incredible work!</a>.</p>
-            </footer>
         </div>
     </body>
 </html>

@@ -70,6 +70,7 @@ recete.db
 manager.py
 pics.py
 config.py
+pw_generator.py
 static/receipts/*.*
 templates/graphs/*.html
 
