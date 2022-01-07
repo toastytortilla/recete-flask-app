@@ -71,7 +71,11 @@ Text colors / Brand colors
 
 .black {
     color: #444444;
-} 
+}
+
+.grey {
+    color: #888888;
+}
 
 .white {
     color: white;    
@@ -80,14 +84,29 @@ Text colors / Brand colors
 /* 
 Text styling 
 */
-.flavor_text {
-    font-size: 2rem;
-    font-weight: 1.5rem;
+.flavor_text_xxs {
+    font-size: 0.75rem;
+    font-weight: 1rem;
+}
+
+.flavor_text_xs {
+    font-size: 1rem;
+    font-weight: 1rem;
 }
 
 .flavor_text_sm {
     font-size: 1.5rem;
     font-weight: 1rem;
+}
+
+.flavor_text {
+    font-size: 2rem;
+    font-weight: 1.5rem;
+}
+
+.title_text_sm {
+    font-size: 1.5rem;
+    font-weight: 1.5rem;
 }
 
 .title_text {
@@ -169,6 +188,20 @@ a:hover {
 }
 
 a:visited {
+    color: #32AF73;
+}
+
+.link {
+    text-decoration: underline;
+    border: none;
+    background-color: transparent;
+}
+
+.link:hover {
+    color: #4ed695;
+}
+
+.link:active {
     color: #32AF73;
 }
 

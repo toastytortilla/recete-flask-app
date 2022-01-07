@@ -6,6 +6,7 @@ import urllib.parse
 
 from PIL import Image, ImageOps
 from flask import redirect, render_template, request, session
+from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
 
 
@@ -157,3 +158,44 @@ def url_path(path):
 
     # Return parentdir/filename.ext as string    
     return pardir_file
+
+
+def validate_pw(password, confirmation):
+    """Validates passwords. Upon success, valid_pw returns hash for submission to database"""
+
+    # Check for valid password
+    flag_upper = False
+    flag_lower = False
+    flag_digit = False
+    flag_char = False
+
+    if len(password) < 8:
+        return 0
+
+    for char in password:
+        if char.isupper():
+            flag_upper = True
+
+        if char.islower():
+            flag_lower = True
+
+        if char.isdigit():
+            flag_digit = True
+
+        if not char.isalpha() and not char.isdigit():
+            flag_char = True
+
+    if flag_upper and flag_lower and flag_digit and flag_char == True:
+        pass
+
+    else:
+        return 1
+
+    # Check passwords for match, hash if they do
+    if password == confirmation:
+        hashed_pw = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
+
+    else:
+        return 2
+
+    return(hashed_pw)

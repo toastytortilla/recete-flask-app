@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Password Reset
+{% endblock %}
+
+{% block main %}
+    <div class="container justify-content-center">
+        <div class="row mt-5 mb-3">
+            <h1 class="title_text black"><strong>Reset your password</strong></h1>
+        </div>
+        <div class="row mt-1 mb-0">
+            <p class="flavor_text_sm mb-0"><strong>Updating your password?.</strong></p>
+            <p class="flavor_text_xs mt-0">Good idea, security is important</p>
+                <form action="/pw_reset" method="POST">
+                    <div class="form-group mb-3">
+                        <input class="form-control" id="username" name="username" placeholder="E-mail address" type="text" required/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input class="form-control" id="password" name="password" placeholder="Password" type="password" required/>
+                    </div>
+                    <div class="mb-3 form-group">
+                        <button class="btn brand-button form-control" type="submit" value="Change Password">Change Password</button>
+                    </div>
+                </form>
+                <div class="my-0 py-0">
+                    <p><strong>________________________________________</strong></p>
+                </div>
+                <div class="mt-0 mb-3">
+                    <p class="flavor_text_sm mb-0"><strong>Forgot your password completely?</strong></p>
+                    <p class="flavor_text_xs mt-0">It's okay, it happens to the best of us.</p>
+                    <form action="/pw_reset_email" method="POST">
+                        <div class="form-group mb-3">
+                            <input class="form-control" id="email" name="email" placeholder="E-mail address" type="text" required/>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn brand-button form-control" type="submit" value="Send me a reset link please.">Send me a reset link, please.</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+    
+{% endblock %}
