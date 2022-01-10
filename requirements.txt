@@ -1,9 +1,10 @@
-flask
+Flask
 flask_session
 requests
 os
 re
 sqlite3
+secrets
 PIL
 plotly.graph_objects
 helpers.py
