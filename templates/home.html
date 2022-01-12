@@ -24,7 +24,7 @@
                 <h3 class="align-items-right justify-content-end flavor_text black">Total Spent: <span class="dark_green"><strong>{{ usd(total_spent) }}</strong></span></h3>
             </div>
         </div>
-        <div class="row mb-3 mx-4 px-4">
+        <div class="row mb-3 mx-auto px-auto">
             <div class="col"></div>
             <div class="col-12 container-fluid justify-content-center aligh-items-center align-self-center w-100">
                 {% if total_receipts > 0 %}
@@ -38,7 +38,7 @@
         <div class="container-fluid my-2">
             <div class="row justify-content-center align-items-center">
                 <h3 class="flavor_text black"><strong>Recent Transactions</strong></h3>
-                {% if total_receipts > 1 %}
+                {% if total_receipts > 0 %}
                     <table class="table table-hover align-self-center black">
                         <thead>
                             <tr>
