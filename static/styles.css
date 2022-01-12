@@ -2,7 +2,7 @@
 General formatting
  */
 html body {
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 nav {
@@ -45,14 +45,18 @@ main img
     margin-top: -1rem;
 }
 
-.neg-margin-3 {
-    margin-top: -3rem;
+.neg-margin-2 {
+    margin-top: -2.5rem;
 }
 
 
 /* 
 Text colors / Brand colors
 */
+.darker_green {
+    color: #237b50;
+}
+
 .dark_green {
     color: #32AF73;
 }
@@ -115,7 +119,7 @@ Text styling
 }
 
 .title_text_xl {
-    font-size: 5rem;
+    font-size: 4.5rem;
     font-weight: 3rem;
     line-height: 95%;
 }
@@ -180,11 +184,15 @@ Link decorations
 */
 
 a {
-    color:rgb(28, 28, 28);
+    color: #444444;
 }
 
 a:hover {
     color: #4ed695;
+}
+
+a:active: {
+    color: #237b50;
 }
 
 a:visited {
@@ -192,6 +200,7 @@ a:visited {
 }
 
 .link {
+    color: #444444;
     text-decoration: underline;
     border: none;
     background-color: transparent;
@@ -202,7 +211,7 @@ a:visited {
 }
 
 .link:active {
-    color: #32AF73;
+    color: #237b50;
 }
 
 /* 

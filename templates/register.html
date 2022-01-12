@@ -8,19 +8,19 @@
     <div class="row mx-2 mb-5 px-2">
         <div class="col-lg-6 mx-2 px-2 align-items-start black">
             <div class="row mt-5">
-                <h1 class="title_text">Create a new account</h1>
+                <h1 class="title_text"><strong>Create a new account</strong></h1>
             </div>
             <div class="row">
                 <p>* Required information</p>
             </div>
             <form action="/register" method="POST">
-                <div class="form-group row mb-0">
+                <div class="form-group row mt-2 mb-0">
                     <label for="username" class="form-label text-start">Email address *</label>
                 </div>
                 <div class="input-group row mb-2">
                     <input autocomplete="off" autofocus class="form-control text-start" id="username" name="username" placeholder="name@example.com" type="text" required/>
                 </div>
-                <div class="form-group row mb-0">
+                <div class="form-group row mt-2 mb-0">
                     <label for="password" class="form-label text-start">Password *</label>
                 </div>
                 <div class="input-group row mb-0">
@@ -36,14 +36,14 @@
                         <li class="text-start mb-0">Symbol, punctuation, or special character</li>
                     </ul>
                 </div>
-                <div class="form-group row mb-0">
+                <div class="form-group row mt-2 mb-0">
                     <label for="confirmation" class="form-label text-start">Confirm password *</label>
                 </div>
                 <div class="input-group row mb-2">
                     <input class="form-control text-start" id="confirmation" name="confirmation" type="password" required/>
                     <!--<button class="btn btn-outline-secondary form-button-border" type="button" id="button-addon2">Show</button>-->
                 </div>
-                <div class="row mb-2">
+                <div class="row my-3">
                     <div class="col-md-4 row">
                         <button class="btn btn-primary brand-button form-control px-5" type="submit" value="Register">Register</button>
                     </div>
