@@ -15,6 +15,8 @@ This is a small tool within the Receipt Manager to help you split bills with fri
 
 ## Development Log
 
+12/28/2021 and onward - Development continues. New features are being planned and implemented, starting with a password reset feature and remote hosting on a web server.
+
 12/27/2021 - Added conditional elements, graphics, and instructions to guide user if they have not stored any receipts in database yet. Adjusted vertical spacing and added a title to the recent transactions table home.html. Made demo video, uploaded demo video. Ported to github, cloned to CS50 IDE, submitted!
 
 12/26/2021 - Ran final tests to ensure usability for users. Adjusted formatting on register.html. 
