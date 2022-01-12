@@ -71,8 +71,10 @@ manager.py
 pics.py
 config.py
 pw_generator.py
-static/receipts/*.*
-templates/graphs/*.html
+static/receipts/*
+!static/receipts/.gitkeep
+templates/graphs/*
+!templates/graphs/.gitkeep
 
 # Scrapy stuff:
 .scrapy

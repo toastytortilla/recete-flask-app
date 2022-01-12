@@ -1,4 +1,5 @@
 import os
+
 import io
 import sqlite3
 import requests
@@ -40,7 +41,8 @@ def login_required(f):
 
 def connect_db():
     """ Connect to db, format rows as dicts, and generate cursor """
-    db = sqlite3.connect('recete.db')
+    ROOT = os.path.dirname(os.path.realpath(__file__))
+    db = sqlite3.connect(os.path.join(ROOT, 'recete.db'))
     db.row_factory = sqlite3.Row
     return db
 
@@ -146,18 +148,17 @@ def usd(value):
     return f"${value:,.2f}"
 
 
-def url_path(path):
-    """Takes img path as input and returns parentdir/filename.ext as string"""
+def pardir_path(path):
+    """Takes file path as input and returns parentdir/filename.ext as string"""
 
     # Split original path into head and tail (full/path/to/parent/dir/ and filename.ext)
     head_tail = os.path.split(path)
 
     # Isolate parent dir, and concatenate with filename.ext
-    pardir_file = os.path.basename(head_tail[0]) + "/" + head_tail[1]
-    print(pardir_file, type(pardir_file))
+    pardir_path = os.path.basename(head_tail[0]) + "/" + head_tail[1]
 
     # Return parentdir/filename.ext as string    
-    return pardir_file
+    return pardir_path
 
 
 def validate_pw(password, confirmation):

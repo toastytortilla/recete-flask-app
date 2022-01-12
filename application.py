@@ -20,7 +20,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
 # Custom helper functions from helpers.py
-from helpers import apology, connect_db, login_required, url_path, usd, allowed_image, convert_img, byte_wrapper, validate_pw
+from helpers import apology, connect_db, login_required, pardir_path, usd, allowed_image, convert_img, byte_wrapper, validate_pw
 
 
 """Configure application"""
@@ -39,7 +39,7 @@ def after_request(response):
 
 
 # Route uploaded images to static/receipts/ directory and establish accepted file exts
-app.config["IMAGE_UPLOADS"] = "C:\\Users\\dvdic\\Documents\\Comp_Sci\\CS50x\\final_project\\recete\\static\\receipts"
+app.config["IMAGE_UPLOADS"] = "C:\\Users\\dvdic\\Documents\\Comp_Sci\\CS50x\\final_project\\recete\\static\\receipts\\"
 
 
 # Configure session to use filesystem (instead of signed cookies)
@@ -84,6 +84,8 @@ TRANS_TYPES = [
     "Uncategorized",
     "Work"
 ]
+
+# MySQL server password on PythonAnywhere: receteDB531! 
 
 
 @app.route("/")
@@ -150,12 +152,15 @@ def home():
     fig.update_layout(font_color='#444444', font_family="Segoe UI, Tahoma, Geneva, Verdana, sans-serif", hoverlabel_font_color="#ffffff")
     fig.update_layout(legend=dict(x=1, y=0.1, traceorder='normal'))
     fig.update_traces(textfont_color='#ffffff')
-    fig.write_html("templates/graphs/" + str(session["user_id"]) + ".html")
 
-    # Get graph path for injection into HTML template
-    graph_file = "graphs/" + str(session["user_id"]) + ".html"
+    # Get path for user's graph and create graph
+    graph_path = os.path.dirname(os.path.realpath(__file__)) + "/templates/graphs/" + str(session["user_id"]) + ".html"
+    fig.write_html(graph_path)
 
-    # Return temporary apology page
+    # Isolate the parent_dir/user_id.html path for rendering in Jinja
+    graph_file = pardir_path(graph_path)
+
+    # Return user's home page
     return render_template("home.html", graph=graph_file, total_receipts=len(receipts), receipts=receipts[0:3], total_spent=total_spent)
 
 
@@ -197,14 +202,14 @@ def manager():
             # Convert image and create thumbnail, capture path and create URL for each
             if allowed_image(image.filename):
                 image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
-                og_img = "static/receipts/" + image.filename
-                tiff_img = convert_img("static/receipts/" + image.filename, "tiff")
-                thumbnail_img = convert_img("static/receipts/" + image.filename, "jpg")
+                og_img = app.config["IMAGE_UPLOADS"]  + image.filename
+                tiff_img = convert_img(og_img, "tiff")
+                thumbnail_img = convert_img(og_img, "jpg")
                 
                 # Format each img path into just parent dir and filename to generate url
-                og_url = url_path(og_img)
-                tiff_url = url_path(tiff_img)
-                thumbnail_url = url_path(thumbnail_img)
+                og_url = pardir_path(og_img)
+                tiff_url = pardir_path(tiff_img)
+                thumbnail_url = pardir_path(thumbnail_img)
 
                 flash("Upload successful!", "message")
                 # return render_template("manager.html", show_img=url_for('static', filename="receipts/" + thmb_img.filename))
@@ -274,7 +279,7 @@ def open_img():
     og_img = request.form.get("og_img")
 
     # Generate url for full-size image
-    og_img = url_path(og_img)
+    og_img = pardir_path(og_img)
 
     return render_template("open_img.html", og_img=url_for('static', filename=og_img))
 
