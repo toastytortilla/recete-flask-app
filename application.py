@@ -49,13 +49,13 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure flask_mail
-app.config['MAIL_SERVER']='smtp.mailtrap.io'
-app.config['MAIL_PORT'] = 2525
-app.config['MAIL_USERNAME'] = '979d2bf9103414'
-app.config['MAIL_PASSWORD'] = '45f3b34792e5b8'
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = ('recete-bot')
+app.config['MAIL_USERNAME'] = os.environ['RECETE_EMAIL_USER']
+app.config['MAIL_PASSWORD'] = os.environ['RECETE_EMAIL_PASSWORD']
+app.config['MAIL_DEFAULT_SENDER'] = ('recete-bot', app.config['MAIL_USERNAME'])
 mail = Mail(app)
 
 
@@ -563,7 +563,7 @@ def pw_reset_email():
         return apology("Invalid email.", 403)
 
     else:
-        # Generate unique 8 digit password for user
+        # Generate unique 11 digit password for user
         password = ""
 
         for item in range(0, 11):
@@ -584,8 +584,7 @@ def pw_reset_email():
 
         # Send email
         title = "Your password has been reset."
-
-        msg = Message("Password reset link", recipients=[email])
+        msg = Message("Password reset", recipients=[email])
         msg.html = render_template('email_template.html', title=title, email=email, password=password)
         mail.send(msg)
 
