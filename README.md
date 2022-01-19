@@ -1,16 +1,29 @@
 # Recete
-#### Video Demo: https://www.youtube.com/watch?v=fMJopiHMkEI
-#### Description:
-Recete is a receipt management application that allows users to easily track purchases, recall receipts for easy returns, split bills, and get a snapshot of their spending habits. I have styled Recete after Venmo because I believe that Venmo would benefit from providing some or all of these functionalities within their own application.
 
-## Features:
+![Recete social preview](https://user-images.githubusercontent.com/67752997/150200809-46b25b03-989f-4c89-b31a-1584fbc0ac39.png)
+
+## About
+Recete is a receipt management application that allows users to easily track purchases, recall receipts for easy returns, split bills, and get a snapshot of their spending habits. I have styled Recete after Venmo because I believe that Venmo would benefit from providing some or all of these functionalities within their own application.
+[Click here](https://www.youtube.com/watch?v=fMJopiHMkEI "Recete Video Demo - YouTube") to view a full-length video demo on YouTube, or watch a quick version below:
+
+
+https://user-images.githubusercontent.com/67752997/150199719-e2066ab4-08f5-4886-a80a-84f3ec4b0845.mp4
+
+
+
+## Features
 ### Home
-This is the homepage of your application. Information extracted from your receipts will be displayed in a graphical representation so that you can get a quick snapshot of your spending habits.
+This is the homepage of your application. It provides a quick way to get a quick snapshot of your spending habits.
+* See your spending by cateogry in a pie chart
+* Check your total amount of money spent
+* Quickly glance at your last few transactions
 
 ### Receipt Manager
-This is the bread and butter of Recete. The Receipt Manager houses all of your captured receipts and presents helpful data for you to browse. Sort and search to find any receipts you may need, and access the image of the receipt for easy returns.
-#### Bill Splitter 
-This is a small tool within the Receipt Manager to help you split bills with friends. Either enter the amount of people you'd like to split the bill between when you enter the receipt, or come to this page to split it retroactively. Bill Splitter will divide the total by the amount of people, and then adjust it in your Receipt Manager. In the future, this tool will eventually allow you to export the bill to Venmo, where it will open up a blank transaction and auto-fill the amount. Then, simply add your friends and a comment and you're good to go!
+This is the bread and butter of Recete. The Receipt Manager houses all of your captured receipts and presents helpful data for you to browse. 
+* Sort and search to find any receipts you may need
+* Access the image of the receipt for easy returns
+* Split the bill's total automatically for shared expenses
+
 
 
 ## Development Log
