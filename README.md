@@ -7,8 +7,7 @@ Recete is a receipt management application that allows users to easily track pur
 [Click here](https://www.youtube.com/watch?v=fMJopiHMkEI "Recete Video Demo - YouTube") to view a full-length video demo on YouTube, or watch a quick version below:
 
 
-https://user-images.githubusercontent.com/67752997/150199719-e2066ab4-08f5-4886-a80a-84f3ec4b0845.mp4
-
+https://user-images.githubusercontent.com/67752997/150202033-6dc08e10-cc91-4645-ba0e-b391cb28f243.mp4
 
 
 ## Features
