@@ -85,7 +85,6 @@ TRANS_TYPES = [
     "Work"
 ]
 
-# MySQL server password on PythonAnywhere: receteDB531! 
 
 
 @app.route("/")
