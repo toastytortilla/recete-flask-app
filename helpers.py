@@ -113,36 +113,6 @@ def convert_img(infile, filetype):
     return True
 
 
-def byte_wrapper(img):
-    
-    """ 
-    Wrap image object in byte wrapper to store in db 
-    
-    byte_wrapper takes an image object as input and returns the image wrapped 
-    in a byte buffer for storage in a database
-
-    ** You must call the io.read() function on the return value when providing 
-    it as a parameter to the database INSERT query. 
-    """
-
-    # Open image object
-    image = Image.open(img)
-    
-    # Create buffer of io.byteIO type
-    buf = io.BytesIO()
-
-    # Save the image into the buffer
-    image.save(buf)
-
-    # Position cursor at beginning of buffer for safety
-    buf.seek(0)
-
-    # Close the image and return the byte-wrapped image
-    image.close()
-
-    return(buf)
-
-
 def usd(value):
     """Format value as USD."""
     return f"${value:,.2f}"

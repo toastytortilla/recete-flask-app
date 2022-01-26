@@ -20,7 +20,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
 # Custom helper functions from helpers.py
-from helpers import apology, connect_db, login_required, pardir_path, usd, allowed_image, convert_img, byte_wrapper, validate_pw
+from helpers import apology, connect_db, login_required, pardir_path, usd, allowed_image, convert_img, validate_pw
 
 
 """Configure application"""
