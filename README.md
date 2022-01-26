@@ -27,8 +27,8 @@ This is the bread and butter of Recete. The Receipt Manager houses all of your c
 ## Upcoming Features
 ### High Priority
 * Refactor the code base
-* Replace all apology() function calls with flash alerts, remove apology function altogether
-* Change information displayed in graph on home.html to represent spending per category as a percent of total spending, not a simple percentage of total receipts as it is now
+* <s>Replace all apology() function calls with flash alerts, remove apology function altogether
+* Change information displayed in graph on home.html to represent spending per category as a percent of total spending, not a simple percentage of total receipts as it is now</s>
 * Reformat manager.html to be mobile-friendly by collapsing or transforming the table using JavaScript for usability on small screen sizes. [Examples shown here](https://medium.com/appnroll-publication/5-practical-solutions-to-make-responsive-data-tables-ff031c48b122). For the modification I'm striving for, there is more info [here](https://elvery.net/demo/responsive-tables/#:~:text=%3C/table%3E-,No%20More%20Tables,-This%20technique%20was) and [here](https://css-tricks.com/responsive-data-tables/)
 
 ### Medium Priority 
@@ -61,7 +61,7 @@ This is the bread and butter of Recete. The Receipt Manager houses all of your c
 1. Collaborate together until we're happy with the results!
 
 ### Database Set Up
-Recete uses a lightweight SQLite3 database to manage user data. For security purposes, this repo does not contain the actual database from the web app. If you want to help and test on your own machine, set up your own SQLite3 database with the following schema:
+Recete uses a lightweight SQLite3 database to manage user data. For security purposes, this repo does not contain the actual database from the web app. If you want to help and test on your own machine, set up your own SQLite3 database with the name `recete.db` and the following schema:
 
 `CREATE TABLE users(id INTEGER, username TEXT NOT NULL, hash TEXT NOT NULL, PRIMARY KEY(id));`
 
