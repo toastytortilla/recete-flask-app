@@ -23,7 +23,6 @@ This is the bread and butter of Recete. The Receipt Manager houses all of your c
 * Access the image of the receipt for easy returns
 * Split the bill's total automatically for shared expenses
 
----
 
 ## Upcoming Features
 ### High Priority
@@ -40,22 +39,27 @@ This is the bread and butter of Recete. The Receipt Manager houses all of your c
 ### Low Priority
 * Fix the positioning on manager.html to keep the title/header fixed while the table scrolls on small screen sizes
 
----
 
 ## Contributing
 1. Pick a feature from the Upcoming Features list above
 1. Fork it
 1. Create your feature branch
+
     `git checkout -b my-new-feature`
+
 1. Work on your code until you're happy with it, then add and commit your changes
+
     `git add files-you-changed`
+
     `git commit -m "Describe your change" -m "If necessary, please also provide a more detailed description of your change"`
+
 1. Push to the branch
+
     `git push origin my-new-feature`
+
 1. Create new Pull Request
 1. Collaborate together until we're happy with the results!
 
----
 
 ## Development Log
 
