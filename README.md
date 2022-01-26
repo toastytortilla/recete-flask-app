@@ -24,6 +24,42 @@ This is the bread and butter of Recete. The Receipt Manager houses all of your c
 * Split the bill's total automatically for shared expenses
 
 
+## Upcoming Features
+### High Priority
+* Refactor the code base
+* Replace all apology() function calls with flash alerts, remove apology function altogether
+* Change information displayed in graph on home.html to represent spending per category as a percent of total spending, not a simple percentage of total receipts as it is now
+* Reformat manager.html to be mobile-friendly by collapsing or transforming the table using JavaScript for usability on small screen sizes. [Examples shown here](https://medium.com/appnroll-publication/5-practical-solutions-to-make-responsive-data-tables-ff031c48b122). For the modification I'm striving for, there is more info [here](https://elvery.net/demo/responsive-tables/#:~:text=%3C/table%3E-,No%20More%20Tables,-This%20technique%20was) and [here](https://css-tricks.com/responsive-data-tables/)
+
+### Medium Priority 
+* Add OCR function to manager.html via PyTesseract
+* Add Edit feature to manager.html to allow users to update a previous entry
+* Add an Export to Venmo feature to enable users to select a bill that they have split, and send that information to Venmo to initiate a Request transaction
+
+### Low Priority
+* Fix the positioning on manager.html to keep the title/header fixed while the table scrolls on small screen sizes
+
+
+## Contributing
+1. Pick a feature from the Upcoming Features list above
+1. Fork it
+1. Create your feature branch
+
+    `git checkout -b my-new-feature`
+
+1. Work on your code until you're happy with it, then add and commit your changes
+
+    `git add files-you-changed`
+
+    `git commit -m "Describe your change" -m "If necessary, please also provide a more detailed description of your change"`
+
+1. Push to the branch
+
+    `git push origin my-new-feature`
+
+1. Create new Pull Request
+1. Collaborate together until we're happy with the results!
+
 
 ## Development Log
 
