@@ -60,6 +60,13 @@ This is the bread and butter of Recete. The Receipt Manager houses all of your c
 1. Create new Pull Request
 1. Collaborate together until we're happy with the results!
 
+### Database Set Up
+Recete uses a lightweight SQLite3 database to manage user data. For security purposes, this repo does not contain the actual database from the web app. If you want to help and test on your own machine, set up your own SQLite3 database with the following schema:
+
+`CREATE TABLE users(id INTEGER, username TEXT NOT NULL, hash TEXT NOT NULL, PRIMARY KEY(id));`
+
+`CREATE TABLE receipts(id INTEGER, user_id INTEGER NOT NULL, date DATE NOT NULL, company TEXT NOT NULL, trans_type TEXT NOT NULL, split INTEGER, total FLOAT NOT NULL, og_img TEXT, tiff_img TEXT, thumbnail_img TEXT, PRIMARY KEY(id));`
+
 
 ## Development Log
 
