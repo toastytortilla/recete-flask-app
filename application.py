@@ -332,8 +332,8 @@ def login():
         # Close connection to recete.db
         cur.close()
 
-        # Redirect user to home page
-        flash('Login successful!', "success")        
+        # Redirect user to home page and flash success message
+        flash('Login successful!', "success")
         return redirect("/home")
 
     # User reached route via GET (as by clicking a link or via redirect)
