@@ -195,7 +195,7 @@ def manager():
             image = request.files["image"]
 
             if image.filename == "":
-                flash("Oops, your upload is missing a file name!")
+                flash("Oops, your upload is missing a file name!", "warning")
                 return redirect(request.url)
 
             # Convert image and create thumbnail, capture path and create URL for each
@@ -210,11 +210,11 @@ def manager():
                 tiff_url = pardir_path(tiff_img)
                 thumbnail_url = pardir_path(thumbnail_img)
 
-                flash("Upload successful!", "message")
+                flash("Upload successful!", "success")
                 # return render_template("manager.html", show_img=url_for('static', filename="receipts/" + thmb_img.filename))
             
             else:
-                flash("Please upload a .jpg/.jpeg or .heic", "message")
+                flash("Please upload a .jpg/.jpeg or .heic", "warning")
                 return redirect(request.url)
 
         # Add receipt to receipts table in recete.db
@@ -261,7 +261,7 @@ def delete():
     id = request.form.get("id")
     if id:
         cur.execute("DELETE FROM receipts WHERE id = ?", [id])
-    flash("Receipt deleted.", "message")
+    flash("Receipt deleted.", "success")
     
     # Commit changes and close db cursor
     rec.commit()
@@ -299,11 +299,13 @@ def login():
 
         # Ensure username was submitted
         if not username:
-            return apology("must provide username", 403)
+            flash("Must provide username", "danger")
+            return redirect(request.url)
 
         # Ensure password was submitted
         elif not password:
-            return apology("must provide password", 403)
+            flash("Must provide password", "danger")
+            return redirect(request.url)
 
         # Connect db, create cursor
         rec = connect_db()
@@ -321,7 +323,8 @@ def login():
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(acct[0]["hash"], password):
-            return apology("invalid username and/or password", 403)
+            flash("Invalid username and/or password", "danger")
+            return redirect(request.url)
 
         # Remember which user has logged in
         session["user_id"] = acct[0]["id"]
@@ -362,18 +365,21 @@ def register():
 
         # Check for valid username
         if not username:
-            return apology("must provide username", 400)
+            flash("Must provide username", "danger")
+            return redirect(request.url)
 
         for char in username:
             if char == " ":
-                return apology("Provide a valid email address", 400)
+                flash("Provide a valid email address", "danger")
+                return redirect(request.url)
 
         if re.fullmatch(email_regex, username):
             print(f"Valid email: {username}")
 
         else:
             print(f"Invalid email: {username}")
-            return apology("Provide a valid email address.", 400)
+            flash("Provide a valid email address", "danger")
+            return redirect(request.url)
 
         """ Check if username is unique """
 
@@ -386,7 +392,8 @@ def register():
         print(f"Total rows are: {rows}")
 
         if rows > 0:
-            return apology("Username already taken!", 400)
+            flash("Username already taken!", "danger")
+            return redirect(request.url)
 
         """ Validate password """
 
@@ -396,23 +403,28 @@ def register():
 
         # Check for both password fields to be filled
         if not request.form.get("password"):
-            return apology("must provide username", 400)
+            flash("Must provide password!", "danger")
+            return redirect(request.url)
 
         if not request.form.get("confirmation"):
-            return apology("must provide username", 400)
+            flash("Must provide password!", "danger")
+            return redirect(request.url)
 
 
         # Check for valid password
         hashed_pw = validate_pw(password, confirmation)
 
         if hashed_pw == 0:
-            return apology("Password must be at least 8 characters", 400)
+            flash("Password must be at least 8 characters", "danger")
+            return redirect(request.url)
 
         if hashed_pw == 1:
-            return apology("Password does not meet complexity requirements", 400)
+            flash("Password does not meet complexity requirements", "danger")
+            return redirect(request.url)
 
-        if hashed_pw ==2:
-            return apology("Passwords do not match", 400)
+        if hashed_pw == 2:
+            flash("Passwords do not match", "danger")
+            return redirect(request.url)
 
         print(f"username: {username}")
         print(f"pw: {hashed_pw}")
@@ -443,15 +455,18 @@ def pw_reset():
 
         # Check for valid username
         if not username:
-            return apology("must provide username", 400)
+            flash("Must provide username", "danger")
+            return redirect(request.url)
 
         for char in username:
             if char == " ":
-                return apology("Provide a valid email address", 400)
+                flash("Provide a valid email address", "danger")
+                return redirect(request.url)
 
         # Ensure password was submitted
         if not password:
-            return apology("must provide password", 403)
+            flash("Must provide password", "danger")
+            return redirect(request.url)
 
         # Connect db, create cursor
         rec = connect_db()
@@ -469,7 +484,8 @@ def pw_reset():
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(acct[0]["hash"], password):
-            return apology("Invalid username and/or password", 403)
+            flash("Invalid username and/or password", "danger")
+            return redirect(request.url)
 
         else:
             # Log user in to save the username/email
@@ -492,22 +508,27 @@ def pw_update():
 
         # Check for both password fields to be filled
         if not request.form.get("password"):
-            return apology("must provide username", 400)
+            flash("Must provide password!", "danger")
+            return redirect(request.url)
 
         if not request.form.get("confirmation"):
-            return apology("must provide username", 400)
+            flash("Must provide password!", "danger")
+            return redirect(request.url)
 
         # Check for valid password
         hashed_pw = validate_pw(password, confirmation)
 
         if hashed_pw == 0:
-            return apology("Password must be at least 8 characters", 400)
+            flash("Password must be at least 8 characters", "danger")
+            return redirect(request.url)
 
         if hashed_pw == 1:
-            return apology("Password does not meet complexity requirements", 400)
+            flash("Password does not meet complexity requirements", "danger")
+            return redirect(request.url)
 
-        if hashed_pw ==2:
-            return apology("Passwords do not match", 400)
+        if hashed_pw == 2:
+            flash("Passwords do not match", "danger")
+            return redirect(request.url)
 
         else:
             print("Success!") # Make this an alert eventually
@@ -559,7 +580,8 @@ def pw_reset_email():
 
     # Ensure username exists
     if len(rows) != 1:
-        return apology("Invalid email.", 403)
+        flash("Invalid email", "danger")
+        return redirect(request.url)
 
     else:
         # Generate unique 11 digit password for user
@@ -588,6 +610,7 @@ def pw_reset_email():
         mail.send(msg)
 
         # Flash alert that tells user to check their email for the password reset link
+        flash("Check your email for a password reset link", "warning")
         return redirect("/login")
 
 
@@ -599,7 +622,9 @@ def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):
         e = InternalServerError()
-    return apology(e.name, e.code)
+    flash(e.name + ", Code: " + str(e.code), "danger")
+    return redirect(request.url)
+
 
 
 # Listen for errors
