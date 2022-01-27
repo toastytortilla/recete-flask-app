@@ -29,7 +29,7 @@ This is the bread and butter of Recete. The Receipt Manager houses all of your c
 * Refactor the code base
 * <s>Replace all apology() function calls with flash alerts, remove apology function altogether</s> - Thank you, [abe-101](https://github.com/abe-101)!
 * Change information displayed in graph on home.html to represent spending per category as a percent of total spending, not a simple percentage of total receipts as it is now
-* Reformat manager.html to be mobile-friendly by collapsing or transforming the table using JavaScript for usability on small screen sizes. [Examples shown here](https://medium.com/appnroll-publication/5-practical-solutions-to-make-responsive-data-tables-ff031c48b122). For the modification I'm striving for, there is more info [here](https://elvery.net/demo/responsive-tables/#:~:text=%3C/table%3E-,No%20More%20Tables,-This%20technique%20was) and [here](https://css-tricks.com/responsive-data-tables/)
+* Reformat manager.html to be mobile-friendly by collapsing or transforming the table. [Examples shown here](https://medium.com/appnroll-publication/5-practical-solutions-to-make-responsive-data-tables-ff031c48b122). For the modification I'm envisioning there is more info [here](https://elvery.net/demo/responsive-tables/#:~:text=%3C/table%3E-,No%20More%20Tables,-This%20technique%20was) and [here](https://css-tricks.com/responsive-data-tables/)
 
 ### Medium Priority 
 * Add OCR function to manager.html via PyTesseract
