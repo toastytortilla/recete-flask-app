@@ -24,7 +24,7 @@ This is the bread and butter of Recete. The Receipt Manager houses all of your c
 * Split the bill's total automatically for shared expenses
 
 
-## Upcoming Features
+## Roadmap
 ### High Priority
 * Refactor the code base
 * <s>Replace all apology() function calls with flash alerts, remove apology function altogether</s> - Thank you, [abe-101](https://github.com/abe-101)!
@@ -41,7 +41,7 @@ This is the bread and butter of Recete. The Receipt Manager houses all of your c
 
 
 ## Contributing
-1. Pick a feature from the Upcoming Features list above
+1. Pick a feature from the Roadmap list above
 1. Fork it
 1. Create your feature branch
 
