@@ -159,6 +159,10 @@ def home():
     # Isolate the parent_dir/user_id.html path for rendering in Jinja
     graph_file = pardir_path(graph_path)
 
+    # Commit changes to recete.db and close connection
+    rec.commit()
+    cur.close()
+
     # Return user's home page
     return render_template("home.html", graph=graph_file, total_receipts=len(receipts), receipts=receipts[0:3], total_spent=total_spent)
 
@@ -172,16 +176,16 @@ def manager():
         rec = connect_db()
         cur = rec.cursor()
 
-        # Validate date input
+        # Get date input
         date = request.form.get("date")
 
-        # Validate company input
+        # Get company input
         company = request.form.get("company")
 
         # Get transaction type
         trans_type = request.form.get("type")
 
-        # Validate split input and calculate new total amount
+        # Get split input and calculate new total amount
         split = request.form.get("split")
         total = request.form.get("total")
 
@@ -202,16 +206,16 @@ def manager():
             if allowed_image(image.filename):
                 image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
                 og_img = app.config["IMAGE_UPLOADS"]  + image.filename
-                tiff_img = convert_img(og_img, "tiff")
+                # tiff_img = convert_img(og_img, "tiff")
                 thumbnail_img = convert_img(og_img, "jpg")
                 
                 # Format each img path into just parent dir and filename to generate url
                 og_url = pardir_path(og_img)
-                tiff_url = pardir_path(tiff_img)
+                # tiff_url = pardir_path(tiff_img)
+                tiff_url = 0 # This is a placeholder value which will be removed when the OCR function is built and .tiff files are needed
                 thumbnail_url = pardir_path(thumbnail_img)
 
                 flash("Upload successful!", "success")
-                # return render_template("manager.html", show_img=url_for('static', filename="receipts/" + thmb_img.filename))
             
             else:
                 flash("Please upload a .jpg/.jpeg or .heic", "warning")
@@ -220,9 +224,9 @@ def manager():
         # Add receipt to receipts table in recete.db
         cur.execute("INSERT INTO receipts (user_id, date, company, trans_type, split, total, og_img, tiff_img, thumbnail_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (session['user_id'], date, company, trans_type, split, total, url_for('static', filename=og_url), url_for('static', filename=tiff_url), url_for('static', filename=thumbnail_url)))
         print("Transaction added to database successfully.")
-        rec.commit()
 
         # Commit changes to recete.db and close connection
+        rec.commit()
         cur.close()
 
         # Redirect to manager.html
@@ -277,7 +281,7 @@ def open_img():
     # Get desired receipt from user
     og_img = request.form.get("og_img")
 
-    # Generate url for full-size image
+    # Generate path to full-size image's location in filesystem
     og_img = pardir_path(og_img)
 
     return render_template("open_img.html", og_img=url_for('static', filename=og_img))
@@ -292,6 +296,9 @@ def login():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+        # Connect db, create cursor
+        rec = connect_db()
+        cur = rec.cursor()
 
         # Get data from user
         username = request.form.get("username")
@@ -306,10 +313,6 @@ def login():
         elif not password:
             flash("Must provide password", "danger")
             return redirect(request.url)
-
-        # Connect db, create cursor
-        rec = connect_db()
-        cur = rec.cursor()
 
         # Query database for username
         rows = cur.execute("SELECT * FROM users WHERE username = ?", [username]).fetchall()
@@ -356,8 +359,11 @@ def logout():
 def register():
     """Register user"""
     if request.method == "POST":
+        # Connect db
+        rec = connect_db()
+        cur = rec.cursor()
 
-        # Validate email
+        """ Username validation"""
         # regular expression (regex) for validating an email address without API's
         email_regex = r'\b[A-Za-z0-9._%+-=!#$^&*()`~]+@+[A-Za-z0-9.-]+\b.[A-Z|a-z]{2,}\b'
 
@@ -382,22 +388,14 @@ def register():
             flash("Provide a valid email address", "danger")
             return redirect(request.url)
 
-        """ Check if username is unique """
-
-        # Connect db
-        rec = connect_db()
-        cur = rec.cursor()
-        
+        # Check if username is unique      
         rows = len(cur.execute("SELECT * FROM users WHERE username = ?", [username]).fetchall())
-
-        print(f"Total rows are: {rows}")
 
         if rows > 0:
             flash("Username already taken!", "danger")
             return redirect(request.url)
 
-        """ Validate password """
-
+        """ Password validation """
         # Get password from user
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
@@ -411,32 +409,31 @@ def register():
             flash("Must provide password!", "danger")
             return redirect(request.url)
 
-
-        # Check for valid password
-        hashed_pw = validate_pw(password, confirmation)
-
-        if hashed_pw == 0:
+        # Check for correct password length
+        if len(password) < 8:
             flash("Password must be at least 8 characters", "danger")
             return redirect(request.url)
 
-        if hashed_pw == 1:
+        # Check for valid password complexity
+        if validate_pw(password) == False:
             flash("Password does not meet complexity requirements", "danger")
             return redirect(request.url)
 
-        if hashed_pw == 2:
+        # Check if password and confirmation match
+        if password != confirmation:
             flash("Passwords do not match", "danger")
             return redirect(request.url)
 
-        print(f"username: {username}")
-        print(f"pw: {hashed_pw}")
+        # Hash user's password and add to db
+        else:
+            hashed_pw = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
+            flash("Success!", "success")
 
         # Submit new user to db
-        cur.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, hashed_pw))
+        cur.execute("UPDATE users SET hash = (?) WHERE id == (?)", (hashed_pw, session["user_id"]))
 
-        # Save (commit the changes)
+        # Commit changes and close db
         rec.commit()
-
-        # Close the db
         cur.close()
 
         # Redirect to Log In page
@@ -450,6 +447,10 @@ def register():
 def pw_reset():
     """ Landing route for password reset process """
     if request.method == "POST":
+        # Connect db, create cursor
+        rec = connect_db()
+        cur = rec.cursor()
+
         # Get input from user
         username = request.form.get("username")
         password = request.form.get("password")
@@ -468,10 +469,6 @@ def pw_reset():
         if not password:
             flash("Must provide password", "danger")
             return redirect(request.url)
-
-        # Connect db, create cursor
-        rec = connect_db()
-        cur = rec.cursor()
 
         # Query database for username
         rows = cur.execute("SELECT * FROM users WHERE username = ?", [username]).fetchall()
@@ -492,6 +489,9 @@ def pw_reset():
             # Log user in to save the username/email
             session["user_id"] = acct[0]["id"]
 
+            # Close db
+            cur.close()
+
             # Route user to pw_update.html
             return redirect("/pw_update")
 
@@ -503,6 +503,10 @@ def pw_reset():
 def pw_update():
     """ Form/logic for updating a password """
     if request.method == "POST":
+        # Connect to db
+        rec = connect_db()
+        cur = rec.cursor()
+
         # Get input from user
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
@@ -516,35 +520,31 @@ def pw_update():
             flash("Must provide password!", "danger")
             return redirect(request.url)
 
-        # Check for valid password
-        hashed_pw = validate_pw(password, confirmation)
-
-        if hashed_pw == 0:
+        # Check for correct password length
+        if len(password) < 8:
             flash("Password must be at least 8 characters", "danger")
             return redirect(request.url)
 
-        if hashed_pw == 1:
+        # Check for valid password complexity
+        if validate_pw(password) == False:
             flash("Password does not meet complexity requirements", "danger")
             return redirect(request.url)
 
-        if hashed_pw == 2:
+        # Check if password and confirmation match
+        if password != confirmation:
             flash("Passwords do not match", "danger")
             return redirect(request.url)
 
+        # Hash user's password and add to db
         else:
-            print("Success!") # Make this an alert eventually
-
-        # Connect to db
-        rec = connect_db()
-        cur = rec.cursor()
+            hashed_pw = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
+            flash("Success!", "success")
 
         # Submit new user to db
         cur.execute("UPDATE users SET hash = (?) WHERE id == (?)", (hashed_pw, session["user_id"]))
 
-        # Save (commit the changes)
+        # Commit changes and close db
         rec.commit()
-
-        # Close the db
         cur.close()
 
         # Sign user out so that they can log in again with their new pw
@@ -561,13 +561,12 @@ def pw_update():
 @app.route("/pw_reset_email", methods=["POST"])
 def pw_reset_email():
     """Sends email to user containing a password reset link"""
-    
-    # Get input from user
-    email = request.form.get("email")
-
     # Connect db, create cursor
     rec = connect_db()
-    cur = rec.cursor()
+    cur = rec.cursor()    
+
+    # Get input from user
+    email = request.form.get("email")
 
     # Query database for username
     rows = cur.execute("SELECT * FROM users WHERE username = ?", [email]).fetchall()
@@ -598,10 +597,8 @@ def pw_reset_email():
         # Overwrite their previous password in the database
         cur.execute("UPDATE users SET hash = (?) WHERE username == (?)", (hashed_pw, email))
 
-        # Commit change to db
+        # Commit change and close db
         rec.commit()
-
-        # Close db
         cur.close()
 
         # Send email
