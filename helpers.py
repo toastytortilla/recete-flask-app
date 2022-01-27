@@ -7,7 +7,6 @@ import urllib.parse
 
 from PIL import Image, ImageOps
 from flask import redirect, render_template, request, session
-from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
 
 
@@ -131,17 +130,14 @@ def pardir_path(path):
     return pardir_path
 
 
-def validate_pw(password, confirmation):
-    """Validates passwords. Upon success, valid_pw returns hash for submission to database"""
+def validate_pw(password):
+    """Validates passwords. Returns True if password meets complexity requirements, false if not"""
 
     # Check for valid password
     flag_upper = False
     flag_lower = False
     flag_digit = False
     flag_char = False
-
-    if len(password) < 8:
-        return 0
 
     for char in password:
         if char.isupper():
@@ -157,16 +153,7 @@ def validate_pw(password, confirmation):
             flag_char = True
 
     if flag_upper and flag_lower and flag_digit and flag_char == True:
-        pass
+        return True
 
     else:
-        return 1
-
-    # Check passwords for match, hash if they do
-    if password == confirmation:
-        hashed_pw = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
-
-    else:
-        return 2
-
-    return(hashed_pw)
+        return False
