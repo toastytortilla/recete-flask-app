@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 # import pytesseract as tess
 # tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR'
 
-from flask import Flask, flash, redirect, render_template, url_for, request, session
+from flask import Flask, flash, get_flashed_messages, redirect, render_template, url_for, request, session
 from flask_session import Session
 from flask_mail import Mail, Message
 from tempfile import mkdtemp
@@ -327,7 +327,7 @@ def login():
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(acct[0]["hash"], password):
             flash("Invalid username and/or password", "danger")
-            return redirect(request.url)
+            return render_template("login.html")
 
         # Remember which user has logged in
         session["user_id"] = acct[0]["id"]
