@@ -6,11 +6,11 @@ import secrets
 import sqlite3
 
 # External dependencies
-import PIL
 import plotly.graph_objects as go
 # import pytesseract as tess
 # tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR'
 
+from PIL import Image
 from flask import Flask, flash, get_flashed_messages, redirect, render_template, url_for, request, session
 from flask_session import Session
 from flask_mail import Mail, Message
@@ -430,10 +430,17 @@ def register():
             flash("Success!", "success")
 
         # Submit new user to db
-        cur.execute("UPDATE users SET hash = (?) WHERE id == (?)", (hashed_pw, session["user_id"]))
+        # cur.execute("UPDATE users SET hash = (?) WHERE id == (?)", (hashed_pw, session["user_id"]))
+        cur.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, hashed_pw))
 
-        # Commit changes and close db
+        # Commit changes to db
         rec.commit()
+
+        # Obtain user ID of newly inserted user, update session
+        user_id = cur.lastrowid
+        session["user_id"] = user_id
+
+        # Close connection to db
         cur.close()
 
         # Redirect to Log In page
